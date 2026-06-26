@@ -59,6 +59,15 @@ if [[ -L "$LINK" || -e "$LINK" ]]; then
 fi
 
 echo "Creating package symlink..."
+if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
+    LINK_TARGET="$PACKAGE_SOURCE"
+else
+    LINK_TARGET="$PACKAGE_SOURCE/package.nw"
+    [[ -e "$LINK_TARGET" ]] || LINK_TARGET="$PACKAGE_SOURCE"
+fi
+
+ln -s "$LINK_TARGET" "$LINK"
+
 ln -s "$PACKAGE_SOURCE" "$LINK"
 
 DESKTOP_FILE="$HOME/.local/share/applications/$DESKTOP_FILENAME"
