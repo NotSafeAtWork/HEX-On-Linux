@@ -19,3 +19,6 @@ A basic understanding of Linux command line
 6. run the command chmod +x installHOL.sh
 7. run the installHOL.sh either through the commandline or by double pressing it
 8. Congrats Hex should be installed in the startmenu now
+
+# Disclaimer
+I am not affiliated with Outsider Artisan this is just a quick project i've made so that when the steam version comes out i can play natively on linux, bugs might occur due to this being an unnoficial port, please dont go around reporting bugs to him without checking if it is a port issue, you can always contact me through github issues if such an issue occurs
