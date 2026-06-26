@@ -68,21 +68,19 @@ fi
 
 ln -s "$LINK_TARGET" "$LINK"
 
-ln -s "$PACKAGE_SOURCE" "$LINK"
-
 DESKTOP_FILE="$HOME/.local/share/applications/$DESKTOP_FILENAME"
 
 mkdir -p "$HOME/.local/share/applications"
 
 cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
-Type=Application
-Version=1.0
 Name=$APP_NAME
+Comment=$APP_COMMENT
 Exec=$SCRIPT_DIR/$EXECUTABLE $LINK
-Icon=$PACKAGE_SOURCE/$ICON_PATH
+Icon=$LINK_TARGET/$ICON_PATH
 Terminal=false
-Categories=Utility;
+Type=Application
+Categories=Game;
 EOF
 
 chmod +x "$DESKTOP_FILE"
