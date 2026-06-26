@@ -34,8 +34,18 @@ fi
 ARCHIVE="${FLAVOR}-v${NWJS_VERSION}-${ARCH}.tar.gz"
 URL="https://dl.nwjs.io/v${NWJS_VERSION}/${ARCHIVE}"
 
-DOWNLOAD_PATH="$SCRIPT_DIR/$ARCHIVE"
-EXTRACT_DIR="$SCRIPT_DIR/${FLAVOR}-v${NWJS_VERSION}-${ARCH}"
+INSTALL_DIR="$SCRIPT_DIR/Hex"
+
+mkdir -p "$INSTALL_DIR"
+
+DOWNLOAD_PATH="$INSTALL_DIR/$ARCHIVE"
+
+if [[ -d "$INSTALL_DIR" ]]; then
+    find "$INSTALL_DIR" \
+        -mindepth 1 \
+        ! -name "$PACKAGE_LINK" \
+        -exec rm -rf {} +
+fi
 
 echo "Downloading NW.js..."
 curl -L "$URL" -o "$DOWNLOAD_PATH"
@@ -43,11 +53,11 @@ curl -L "$URL" -o "$DOWNLOAD_PATH"
 echo "Extracting..."
 tar -xzf "$DOWNLOAD_PATH" \
     --strip-components=1 \
-    -C "$SCRIPT_DIR"
+    -C "$INSTALL_DIR"
 
 rm "$DOWNLOAD_PATH"
 
-LINK="$SCRIPT_DIR/$PACKAGE_LINK"
+LINK="$INSTALL_DIR/$PACKAGE_LINK"
 
 if [[ -L "$LINK" || -e "$LINK" ]]; then
     if [[ "$FORCE" == "true" ]]; then
@@ -76,7 +86,7 @@ cat > "$DESKTOP_FILE" <<EOF
 [Desktop Entry]
 Name=$APP_NAME
 Comment=$APP_COMMENT
-Exec=$SCRIPT_DIR/$EXECUTABLE $LINK
+Exec=$INSTALL_DIR/$EXECUTABLE $LINK
 Icon=$LINK_TARGET/$ICON_PATH
 Terminal=false
 Type=Application
