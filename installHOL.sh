@@ -6,9 +6,6 @@ pause() {
     echo
 }
 
-trap pause EXIT
-
-
 resolve_package_target() {
     while true; do
         if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
@@ -154,4 +151,4 @@ echo
 echo "Desktop entry:"
 echo "  $DESKTOP_FILE"
 
-pause
+trap pause EXIT
