@@ -69,12 +69,10 @@ if [[ -L "$LINK" || -e "$LINK" ]]; then
 fi
 
 echo "Creating package symlink..."
-if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
-    LINK_TARGET="$PACKAGE_SOURCE"
-else
-    LINK_TARGET="$PACKAGE_SOURCE/package.nw"
-    [[ -e "$LINK_TARGET" ]] || LINK_TARGET="$PACKAGE_SOURCE"
-fi
+
+
+resolve_package_target
+validate_package_target
 
 ln -s "$LINK_TARGET" "$LINK"
 
@@ -100,3 +98,27 @@ echo "Done!"
 echo
 echo "Desktop entry:"
 echo "  $DESKTOP_FILE"
+
+
+
+
+resolve_package_target() {
+    if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
+        LINK_TARGET="$PACKAGE_SOURCE"
+    elif [[ -e "$PACKAGE_SOURCE/package.nw" ]]; then
+        LINK_TARGET="$PACKAGE_SOURCE/package.nw"
+    else
+        LINK_TARGET="$PACKAGE_SOURCE"
+    fi
+}
+
+validate_package_target() {
+    while [[ ! -e "$LINK_TARGET" ]]; do
+        echo
+        echo "package.nw was not found:"
+        echo "  $LINK_TARGET"
+        echo
+
+        read -erp "Please enter the full path to the package.nw folder: " LINK_TARGET
+    done
+}
