@@ -18,7 +18,7 @@ A basic understanding of Linux command line
 4. Set the PACKAGE_SOURCE to your Hex filepath and save the config (Optional will also get prompted in the installer)
 5. Double click the installHOL.sh and launch it
 
-**If you couldnt launch it follow these instructions**
+**If you couldnt launch the installer follow these instructions**
 1. open the command line into the HEX-On-Linux folder
 2. run the command chmod +x installHOL.sh
 3. run the installHOL.sh either through the commandline or by double pressing it
