@@ -1,5 +1,49 @@
 #!/usr/bin/env bash
 
+pause() {
+    echo
+    read -n 1 -s -r -p "Press any key to continue..."
+    echo
+}
+
+trap pause EXIT
+
+
+resolve_package_target() {
+    while true; do
+        if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
+            LINK_TARGET="$PACKAGE_SOURCE"
+            return
+        fi
+
+        if [[ -d "$PACKAGE_SOURCE/package.nw" ]]; then
+            LINK_TARGET="$PACKAGE_SOURCE/package.nw"
+            return
+        fi
+
+        echo
+        echo "No package.nw folder was found."
+        echo "You can select either:"
+        echo "  • the Hex project folder (containing package.nw)"
+        echo "  • the package.nw folder itself"
+        echo
+
+        read -erp "Please enter the correct path: " PACKAGE_SOURCE
+        check_package_source
+    done
+}
+
+check_package_source() {
+    while [[ ! -e "$PACKAGE_SOURCE" ]]; do
+        echo
+        echo "The specified path does not exist:"
+        echo "  $PACKAGE_SOURCE"
+        echo
+
+        read -erp "Please enter the path to your Hex project or package.nw folder: " PACKAGE_SOURCE
+    done
+}
+
 if [[ -z "${INSTALLER_TERMINAL:-}" && ! -t 1 ]]; then
     export INSTALLER_TERMINAL=1
 
@@ -43,7 +87,6 @@ DOWNLOAD_PATH="$INSTALL_DIR/$ARCHIVE"
 if [[ -d "$INSTALL_DIR" ]]; then
     find "$INSTALL_DIR" \
         -mindepth 1 \
-        ! -name "$PACKAGE_LINK" \
         -exec rm -rf {} +
 fi
 
@@ -70,13 +113,24 @@ fi
 
 echo "Creating package symlink..."
 
-
+check_package_source
 resolve_package_target
-validate_package_target
 
 ln -s "$LINK_TARGET" "$LINK"
 
 DESKTOP_FILE="$HOME/.local/share/applications/$DESKTOP_FILENAME"
+
+if [[ -f "$DESKTOP_FILE" ]]; then
+    if grep -q "^X-Hex-On-Linux-Installer=true$" "$DESKTOP_FILE"; then
+        echo "Removing previous desktop entry..."
+        rm -f "$DESKTOP_FILE"
+    else
+        echo "A desktop entry named '$DESKTOP_FILENAME' already exists but"
+        echo "it was not created by this installer."
+        echo "Please remove or rename it manually."
+        exit 1
+    fi
+fi
 
 mkdir -p "$HOME/.local/share/applications"
 
@@ -89,6 +143,7 @@ Icon=$LINK_TARGET/$ICON_PATH
 Terminal=false
 Type=Application
 Categories=Game;
+X-Hex-On-Linux-Installer=true
 EOF
 
 chmod +x "$DESKTOP_FILE"
@@ -99,26 +154,4 @@ echo
 echo "Desktop entry:"
 echo "  $DESKTOP_FILE"
 
-
-
-
-resolve_package_target() {
-    if [[ "$(basename "$PACKAGE_SOURCE")" == "package.nw" ]]; then
-        LINK_TARGET="$PACKAGE_SOURCE"
-    elif [[ -e "$PACKAGE_SOURCE/package.nw" ]]; then
-        LINK_TARGET="$PACKAGE_SOURCE/package.nw"
-    else
-        LINK_TARGET="$PACKAGE_SOURCE"
-    fi
-}
-
-validate_package_target() {
-    while [[ ! -e "$LINK_TARGET" ]]; do
-        echo
-        echo "package.nw was not found:"
-        echo "  $LINK_TARGET"
-        echo
-
-        read -erp "Please enter the full path to the package.nw folder: " LINK_TARGET
-    done
-}
+pause
