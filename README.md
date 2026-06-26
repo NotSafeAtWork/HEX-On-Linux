@@ -15,11 +15,14 @@ A basic understanding of Linux command line
 1. Get any (windows) version of Hex installed to your system please remember where you install it we will need this folder later
 2. Clone a version of HEX On Linux and extract it to a place of your choosing
 3. Open the config.conf with a file editor of your choice
-4. Set the PACKAGE_SOURCE to your Hex filepath and save the config
-5. open the command line into the HEX-On-Linux folder
-6. run the command chmod +x installHOL.sh
-7. run the installHOL.sh either through the commandline or by double pressing it
-8. Congrats Hex should be installed in the startmenu now
+4. Set the PACKAGE_SOURCE to your Hex filepath and save the config (Optional will also get prompted in the installer)
+5. Double click the installHOL.sh and launch it
+
+**If you couldnt launch it follow these instructions**
+1. open the command line into the HEX-On-Linux folder
+2. run the command chmod +x installHOL.sh
+3. run the installHOL.sh either through the commandline or by double pressing it
+4. Congrats Hex should be installed in the startmenu now
 
 # Disclaimer
 I am not affiliated with Outsider Artisan this is just a quick project i've made so that when the steam version comes out i can play natively on linux, bugs might occur due to this being an unnoficial port, please dont go around reporting bugs to him without checking if it is a port issue, you can always contact me through github issues if such an issue occurs
