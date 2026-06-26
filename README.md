@@ -7,6 +7,7 @@ A working copy of Hex: Becoming a Succubus from one of the following places
   * [itch (free)](https://outsiderartisan.itch.io/hex-free)
   * [itch (silver)](https://outsiderartisan.itch.io/hex-silver)
   * [itch (gold)](https://outsiderartisan.itch.io/hex-gold)
+
 A basic understanding of Linux command line
 
 # Installation
