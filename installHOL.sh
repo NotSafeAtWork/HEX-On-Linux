@@ -143,11 +143,39 @@ uninstallHexOnLinux() {
 	fi
 }
 
+installFont() {
+    FONT_SOURCE="$SCRIPT_DIR/Tuffy-Regular.ttf"
+
+    if [[ ! -f "$FONT_SOURCE" ]]; then
+        echo "Font not found:"
+        echo "  $FONT_SOURCE"
+        exit 1
+    fi
+
+    FONT_DIR="$HOME/.local/share/fonts"
+    mkdir -p "$FONT_DIR"
+
+    echo "Installing Tuffy..."
+    cp -f "$FONT_SOURCE" "$FONT_DIR/"
+
+    if command -v fc-cache >/dev/null 2>&1; then
+        echo "Updating font cache..."
+        fc-cache -f "$FONT_DIR"
+    else
+        echo "Warning: fc-cache not found."
+        echo "The font may become available after logging out and back in."
+    fi
+
+    echo
+    echo "Tuffy has been installed successfully."
+}
+
 menu() {
 	clear
 	echo "1) Install"
 	echo "2) Uninstall"
 	echo "3) Steam patch (Not yet implemented)"
+	echo "4) Font patch (fix spell counters)"
 	echo "c) Quit"
 
 	read -rp "Enter your choice: " choice
@@ -156,6 +184,7 @@ menu() {
 		1) installHexOnLinux ;;
 		2) uninstallHexOnLinux ;;
 		3) echo "Restarting..." ;;
+		4) installFont ;;
 		c) echo "Steam patch (Not yet implemented)!" ;;
 		*) menu ;;
 	esac
